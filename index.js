@@ -174,8 +174,10 @@ async function updateTrackedPositions() {
 
 
 async function checkBalances() {
+    console.log("check balances: ", signer.address  )
     try {
         const balance = await provider.getBalance(signer.address);
+        console.log("lowAlertBalances[network]", lowAlertBalances[network] / 1e18)
         if (balance.lt(lowAlertBalances[network])) {
             await sendDiscordAlert(`LOW BALANCE on ${network} ${ethers.utils.formatEther(balance)} ${nativeTokenSymbol}`)
         }
@@ -184,13 +186,13 @@ async function checkBalances() {
     }
 }
 
-
+// cooper s - not sure what to do with these discord functions
 async function sendDiscordInfo(msg) {
-    await sendDiscordMessage(msg, process.env.DISCORD_CHANNEL)
+ //   await sendDiscordMessage(msg, process.env.DISCORD_CHANNEL)
 }
 
 async function sendDiscordAlert(msg) {
-    await sendDiscordMessage(msg, process.env.DISCORD_CHANNEL_ALERT)
+ //   await sendDiscordMessage(msg, process.env.DISCORD_CHANNEL_ALERT)
 }
 
 async function sendDiscordMessage(msg, channel) {
@@ -647,9 +649,13 @@ async function autoCompoundPositions(runNumber = 0) {
 }
 
 async function run() {
+    console.log("check balances...")
     await checkBalances()
+console.log("update tracked positions...")
     await updateTrackedPositions()
+    console.log("autocompound positions...")
     await autoCompoundPositions()
+   
     setInterval(async () => { await updateTrackedPositions() }, updatePositionsInterval);
     setInterval(async () => { await checkBalances() }, checkBalancesInterval);
 }

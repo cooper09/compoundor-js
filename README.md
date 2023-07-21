@@ -14,3 +14,6 @@ Then:
 npm install
 node index.js
 ```
+
+## ReadME updates
+More general detail on how the compounder operates
